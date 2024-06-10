@@ -1,0 +1,984 @@
+INFO: memory[0x00000000..0x00000003] <-- 0x20080100
+INFO: memory[0x00000004..0x00000007] <-- 0x21090100
+INFO: memory[0x00000008..0x0000000b] <-- 0x212a0100
+INFO: memory[0x0000000c..0x0000000f] <-- 0x214b0100
+INFO: memory[0x00000010..0x00000013] <-- 0x216c0100
+INFO: memory[0x00000014..0x00000017] <-- 0x218d0100
+INFO: memory[0x00000018..0x0000001b] <-- 0x218d0100
+INFO: memory[0x0000001c..0x0000001f] <-- 0x21ae0100
+INFO: memory[0x00000020..0x00000023] <-- 0x21ae0100
+INFO: memory[0x00000024..0x00000027] <-- 0x21cf0100
+INFO: memory[0x00000028..0x0000002b] <-- 0x21cf0100
+INFO: memory[0x0000002c..0x0000002f] <-- 0x20000000
+INFO: memory[0x00000030..0x00000033] <-- 0x20000000
+INFO: memory[0x00000034..0x00000037] <-- 0x20000000
+INFO: memory[0x00000038..0x0000003b] <-- 0x20000000
+==================== Cycle 0 ====================
+PC = 0xfffffffc
+Registers:
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000000
+    instruction      = 0x00000000
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b0
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b0
+    pcPlus4          = 0x00000000
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000000
+    rs               = 0b00000
+    rt               = 0b00000
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b0
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000000
+    aluZero          = 0b0
+    aluResult        = 0x00000000
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b00000
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b0
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000000
+    regDstIdx        = 0b00000
+==================== Cycle 1 ====================
+PC = 0x00000000
+Registers:
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000004
+    instruction      = 0x20080100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b1
+    ctrlEXALUOp      = 0b10
+    ctrlEXALUSrc     = 0b0
+    pcPlus4          = 0x00000000
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000000
+    rs               = 0b00000
+    rt               = 0b00000
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b0
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000000
+    aluZero          = 0b1
+    aluResult        = 0x00000000
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b00000
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b0
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000000
+    regDstIdx        = 0b00000
+==================== Cycle 2 ====================
+PC = 0x00000004
+Registers:
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000008
+    instruction      = 0x21090100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000004
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b00000
+    rt               = 0b01000
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000000
+    aluZero          = 0b1
+    aluResult        = 0x00000000
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b00000
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b0
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000000
+    regDstIdx        = 0b00000
+==================== Cycle 3 ====================
+PC = 0x00000008
+Registers:
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x0000000c
+    instruction      = 0x212a0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000008
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01000
+    rt               = 0b01001
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000404
+    aluZero          = 0b0
+    aluResult        = 0x00000100
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01000
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000000
+    regDstIdx        = 0b00000
+==================== Cycle 4 ====================
+PC = 0x0000000c
+Registers:
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000010
+    instruction      = 0x214b0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x0000000c
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01001
+    rt               = 0b01010
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000408
+    aluZero          = 0b0
+    aluResult        = 0x00000200
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01001
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000100
+    regDstIdx        = 0b01000
+==================== Cycle 5 ====================
+PC = 0x00000010
+Registers:
+  $08 = 0x00000100
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000014
+    instruction      = 0x216c0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000010
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01010
+    rt               = 0b01011
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x0000040c
+    aluZero          = 0b0
+    aluResult        = 0x00000300
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01010
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000200
+    regDstIdx        = 0b01001
+==================== Cycle 6 ====================
+PC = 0x00000014
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000018
+    instruction      = 0x218d0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000014
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01011
+    rt               = 0b01100
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000410
+    aluZero          = 0b0
+    aluResult        = 0x00000400
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01011
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000300
+    regDstIdx        = 0b01010
+==================== Cycle 7 ====================
+PC = 0x00000018
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x0000001c
+    instruction      = 0x218d0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000018
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01100
+    rt               = 0b01101
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000414
+    aluZero          = 0b0
+    aluResult        = 0x00000500
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01100
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000400
+    regDstIdx        = 0b01011
+==================== Cycle 8 ====================
+PC = 0x0000001c
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000020
+    instruction      = 0x21ae0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x0000001c
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01100
+    rt               = 0b01101
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000418
+    aluZero          = 0b0
+    aluResult        = 0x00000600
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01101
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000500
+    regDstIdx        = 0b01100
+==================== Cycle 9 ====================
+PC = 0x00000020
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000024
+    instruction      = 0x21ae0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000020
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01101
+    rt               = 0b01110
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x0000041c
+    aluZero          = 0b0
+    aluResult        = 0x00000600
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01101
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000600
+    regDstIdx        = 0b01101
+==================== Cycle 10 ====================
+PC = 0x00000024
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+  $13 = 0x00000600
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000028
+    instruction      = 0x21cf0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000024
+    regFileReadData1 = 0x00000600
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01101
+    rt               = 0b01110
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000420
+    aluZero          = 0b0
+    aluResult        = 0x00000700
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01110
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000600
+    regDstIdx        = 0b01101
+==================== Cycle 11 ====================
+PC = 0x00000028
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+  $13 = 0x00000600
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x0000002c
+    instruction      = 0x21cf0100
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000028
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01110
+    rt               = 0b01111
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000424
+    aluZero          = 0b0
+    aluResult        = 0x00000700
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01110
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000700
+    regDstIdx        = 0b01110
+==================== Cycle 12 ====================
+PC = 0x0000002c
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+  $13 = 0x00000600
+  $14 = 0x00000700
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000030
+    instruction      = 0x20000000
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x0000002c
+    regFileReadData1 = 0x00000700
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000100
+    rs               = 0b01110
+    rt               = 0b01111
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000428
+    aluZero          = 0b0
+    aluResult        = 0x00000800
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01111
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000700
+    regDstIdx        = 0b01110
+==================== Cycle 13 ====================
+PC = 0x00000030
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+  $13 = 0x00000600
+  $14 = 0x00000700
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000034
+    instruction      = 0x20000000
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000030
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000000
+    rs               = 0b00000
+    rt               = 0b00000
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x0000042c
+    aluZero          = 0b0
+    aluResult        = 0x00000800
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b01111
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000800
+    regDstIdx        = 0b01111
+==================== Cycle 14 ====================
+PC = 0x00000034
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+  $13 = 0x00000600
+  $14 = 0x00000700
+  $15 = 0x00000800
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x00000038
+    instruction      = 0x20000000
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000034
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000000
+    rs               = 0b00000
+    rt               = 0b00000
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000030
+    aluZero          = 0b1
+    aluResult        = 0x00000000
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b00000
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000800
+    regDstIdx        = 0b01111
+==================== Cycle 15 ====================
+PC = 0x00000038
+Registers:
+  $08 = 0x00000100
+  $09 = 0x00000200
+  $10 = 0x00000300
+  $11 = 0x00000400
+  $12 = 0x00000500
+  $13 = 0x00000600
+  $14 = 0x00000700
+  $15 = 0x00000800
+Data Memory:
+Instruction Memory:
+  memory[0x00000003..0x00000000] = 0x20080100
+  memory[0x00000007..0x00000004] = 0x21090100
+  memory[0x0000000b..0x00000008] = 0x212a0100
+  memory[0x0000000f..0x0000000c] = 0x214b0100
+  memory[0x00000013..0x00000010] = 0x216c0100
+  memory[0x00000017..0x00000014] = 0x218d0100
+  memory[0x0000001b..0x00000018] = 0x218d0100
+  memory[0x0000001f..0x0000001c] = 0x21ae0100
+  memory[0x00000023..0x00000020] = 0x21ae0100
+  memory[0x00000027..0x00000024] = 0x21cf0100
+  memory[0x0000002b..0x00000028] = 0x21cf0100
+  memory[0x0000002f..0x0000002c] = 0x20000000
+  memory[0x00000033..0x00000030] = 0x20000000
+  memory[0x00000037..0x00000034] = 0x20000000
+  memory[0x0000003b..0x00000038] = 0x20000000
+Latches:
+  IF-ID Latch:
+    pcPlus4          = 0x0000003c
+    instruction      = 0x20000000
+  ID-EX Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    ctrlEXRegDst     = 0b0
+    ctrlEXALUOp      = 0b00
+    ctrlEXALUSrc     = 0b1
+    pcPlus4          = 0x00000038
+    regFileReadData1 = 0x00000000
+    regFileReadData2 = 0x00000000
+    signExtImmediate = 0x00000000
+    rs               = 0b00000
+    rt               = 0b00000
+    rd               = 0b00000
+  EX-MEM Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    ctrlMEMBranch    = 0b0
+    ctrlMEMMemRead   = 0b0
+    ctrlMEMMemWrite  = 0b0
+    branchTargetAddr = 0x00000034
+    aluZero          = 0b1
+    aluResult        = 0x00000000
+    regFileReadData2 = 0x00000000
+    regDstIdx        = 0b00000
+  MEM-WB Latch:
+    ctrlWBMemToReg   = 0b0
+    ctrlWBRegWrite   = 0b1
+    dataMemReadData  = 0x00000000
+    aluResult        = 0x00000000
+    regDstIdx        = 0b00000
