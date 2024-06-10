@@ -1,0 +1,391 @@
+#ifndef __PIPELINED_CPU_H__
+#define __PIPELINED_CPU_H__
+
+#include "DigitalCircuit.h"
+#include "Memory.h"
+#include "Control.h"
+#include "RegisterFile.h"
+#include "ALU.h"
+#include "ALUControl.h"
+#include "Miscellaneous.h"
+
+#ifdef ENABLE_DATA_FORWARDING
+class ForwardingUnit : public DigitalCircuit {
+public:
+    ForwardingUnit(
+        const std::string &name,
+        const Wire<5> *iIDEXRs,
+        const Wire<5> *iIDEXRt,
+        const Wire<1> *iEXMEMRegWrite,
+        const Wire<5> *iEXMEMRegDstIdx,
+        const Wire<1> *iMEMWBRegWrite,
+        const Wire<5> *iMEMWBRegDstIdx,
+        Wire<2> *oForwardA,
+        Wire<2> *oForwardB
+    ) : DigitalCircuit(name) {
+        _iIDEXRs = iIDEXRs;
+        _iIDEXRt = iIDEXRt;
+        _iEXMEMRegWrite = iEXMEMRegWrite;
+        _iEXMEMRegDstIdx = iEXMEMRegDstIdx;
+        _iMEMWBRegWrite = iMEMWBRegWrite;
+        _iMEMWBRegDstIdx = iMEMWBRegDstIdx;
+        _oForwardA = oForwardA;
+        _oForwardB = oForwardB;
+    }
+
+    virtual void advanceCycle() {
+        if (_iEXMEMRegWrite->to_ulong() && _iEXMEMRegDstIdx->to_ulong() != 0) {
+            if (_iEXMEMRegDstIdx->to_ulong() == _iIDEXRs->to_ulong()) {
+                _oForwardA->from_ulong(1); // Forward from EX stage
+            } else if (_iEXMEMRegDstIdx->to_ulong() == _iIDEXRt->to_ulong()) {
+                _oForwardB->from_ulong(1); // Forward from EX stage
+            }
+        }
+        if (_iMEMWBRegWrite->to_ulong() && _iMEMWBRegDstIdx->to_ulong() != 0) {
+            if (_iMEMWBRegDstIdx->to_ulong() == _iIDEXRs->to_ulong()) {
+                _oForwardA->from_ulong(2); // Forward from MEM stage
+            } else if (_iMEMWBRegDstIdx->to_ulong() == _iIDEXRt->to_ulong()) {
+                _oForwardB->from_ulong(2); // Forward from MEM stage
+            }
+        }
+    }
+
+private:
+    const Wire<5> *_iIDEXRs;
+    const Wire<5> *_iIDEXRt;
+    const Wire<1> *_iEXMEMRegWrite;
+    const Wire<5> *_iEXMEMRegDstIdx;
+    const Wire<1> *_iMEMWBRegWrite;
+    const Wire<5> *_iMEMWBRegDstIdx;
+    Wire<2> *_oForwardA;
+    Wire<2> *_oForwardB;
+};
+
+#ifdef ENABLE_HAZARD_DETECTION
+class HazardDetectionUnit : public DigitalCircuit {
+public:
+    HazardDetectionUnit(
+        const std::string &name,
+        const Wire<5> *iIFIDRs,
+        const Wire<5> *iIFIDRt,
+        const Wire<1> *iIDEXMemRead,
+        const Wire<5> *iIDEXRt,
+        Wire<1> *oPCWrite,
+        Wire<1> *oIFIDWrite,
+        Wire<1> *oIDEXCtrlWrite
+    ) : DigitalCircuit(name) {
+        _iIFIDRs = iIFIDRs;
+        _iIFIDRt = iIFIDRt;
+        _iIDEXMemRead = iIDEXMemRead;
+        _iIDEXRt = iIDEXRt;
+        _oPCWrite = oPCWrite;
+        _oIFIDWrite = oIFIDWrite;
+        _oIDEXCtrlWrite = oIDEXCtrlWrite;
+    }
+
+    virtual void advanceCycle() {
+        if (_iIDEXMemRead->to_ulong() && (_iIDEXRt->to_ulong() == _iIFIDRs->to_ulong() || _iIDEXRt->to_ulong() == _iIFIDRt->to_ulong())) {
+            _oPCWrite->from_ulong(0); // Stall PC
+            _oIFIDWrite->from_ulong(0); // Stall IF/ID latch
+            _oIDEXCtrlWrite->from_ulong(0); // Stall ID/EX control signals
+        } else {
+            _oPCWrite->from_ulong(1);
+            _oIFIDWrite->from_ulong(1);
+            _oIDEXCtrlWrite->from_ulong(1);
+        }
+    }
+
+private:
+    const Wire<5> *_iIFIDRs;
+    const Wire<5> *_iIFIDRt;
+    const Wire<1> *_iIDEXMemRead;
+    const Wire<5> *_iIDEXRt;
+    Wire<1> *_oPCWrite;
+    Wire<1> *_oIFIDWrite;
+    Wire<1> *_oIDEXCtrlWrite;
+};
+#endif // ENABLE_HAZARD_DETECTION
+#endif // ENABLE_DATA_FORWARDING
+
+class PipelinedCPU : public DigitalCircuit {
+
+public:
+
+    PipelinedCPU(
+        const std::string &name,
+        const std::uint32_t &initialPC,
+        const Memory::Endianness &memoryEndianness,
+        const char *regFileName,
+        const char *instMemFileName,
+        const char *dataMemFileName
+    ) : DigitalCircuit(name) {
+        _currCycle = 0;
+        _PC = initialPC;
+
+        _adderPCPlus4 = new Adder<32>("adderPCPlus4");
+        _instMemory = new Memory("instMemory", Memory::INSTRUCTION, memoryEndianness);
+        _instMemory->load(instMemFileName);
+
+        _control = new Control("control");
+        _registerFile = new RegisterFile("registerFile");
+        _registerFile->load(regFileName);
+
+        _signExtend = new SignExtend<16, 32>("signExtend");
+
+        _adderBranchTargetAddr = new Adder<32>("adderBranchTargetAddr");
+        _muxALUSrc = new MUX2<32>("muxALUSrc");
+        _aluControl = new ALUControl("aluControl");
+        _alu = new ALU("alu");
+        _muxRegDst = new MUX2<5>("muxRegDst");
+
+        _muxPCSrc = new MUX2<32>("muxPCSrc");
+        _dataMemory = new Memory("dataMemory", Memory::DATA, memoryEndianness);
+        _dataMemory->load(dataMemFileName);
+
+        _muxMemToReg = new MUX2<32>("muxMemToReg");
+
+#ifdef ENABLE_DATA_FORWARDING
+        _forwardingUnit = new ForwardingUnit("forwardingUnit", &_latchIDEX.rs, &_latchIDEX.rt, &_latchEXMEM.ctrlWB.regWrite, &_latchEXMEM.regDstIdx, &_latchMEMWB.ctrlWB.regWrite, &_latchMEMWB.regDstIdx, &_forwardA, &_forwardB);
+        _muxForwardA = new MUX3<32>("muxForwardA");
+        _muxForwardB = new MUX3<32>("muxForwardB");
+#ifdef ENABLE_HAZARD_DETECTION
+        _hazDetUnit = new HazardDetectionUnit("hazDetUnit", &_hazDetIFIDRs, &_hazDetIFIDRt, &_latchIDEX.ctrlMEM.memRead, &_latchIDEX.rt, &_hazDetPCWrite, &_hazDetIFIDWrite, &_hazDetIDEXCtrlWrite);
+#endif
+#endif
+    }
+
+    virtual void advanceCycle() {
+        _currCycle += 1;
+
+        // IF stage
+        _adderPCPlus4->input(0, _PC);
+        _adderPCPlus4->input(1, 4);
+        _adderPCPlus4->output(&_pcPlus4);
+        _instMemory->read(_PC, &_latchIFID.instruction);
+        _latchIFID.pcPlus4 = _pcPlus4;
+
+        // ID stage
+        _control->input(_latchIFID.instruction.to_ulong() >> 26);
+        _registerFile->read(_latchIFID.instruction.to_ulong() >> 21, &_latchIDEX.regFileReadData1);
+        _registerFile->read((_latchIFID.instruction.to_ulong() >> 16) & 0x1F, &_latchIDEX.regFileReadData2);
+        _signExtend->input(_latchIFID.instruction.to_ulong() & 0xFFFF);
+        _signExtend->output(&_latchIDEX.signExtImmediate);
+        _latchIDEX.pcPlus4 = _latchIFID.pcPlus4;
+        _latchIDEX.instruction = _latchIFID.instruction;
+        _latchIDEX.ctrlWB = {_control->output(5), _control->output(7)};
+        _latchIDEX.ctrlMEM = {_control->output(3), _control->output(4), _control->output(6)};
+        _latchIDEX.ctrlEX = {_control->output(0), _control->output(1), _control->output(2)};
+        _latchIDEX.rs = _latchIFID.instruction.to_ulong() >> 21;
+        _latchIDEX.rt = (_latchIFID.instruction.to_ulong() >> 16) & 0x1F;
+        _latchIDEX.rd = (_latchIFID.instruction.to_ulong() >> 11) & 0x1F;
+
+#ifdef ENABLE_HAZARD_DETECTION
+        _hazDetIFIDRs = _latchIFID.instruction.to_ulong() >> 21;
+        _hazDetIFIDRt = (_latchIFID.instruction.to_ulong() >> 16) & 0x1F;
+        _hazDetUnit->advanceCycle();
+        if (_hazDetPCWrite.to_ulong() == 0) {
+            _latchIFID.write = false;
+        } else {
+            _latchIFID.write = true;
+        }
+        if (_hazDetIFIDWrite.to_ulong() == 0) {
+            _latchIFID.write = false;
+        } else {
+            _latchIFID.write = true;
+        }
+        if (_hazDetIDEXCtrlWrite.to_ulong() == 0) {
+            _latchIDEX.ctrlWB.regWrite = 0;
+            _latchIDEX.ctrlWB.memToReg = 0;
+            _latchIDEX.ctrlMEM.branch = 0;
+            _latchIDEX.ctrlMEM.memRead = 0;
+            _latchIDEX.ctrlMEM.memWrite = 0;
+            _latchIDEX.ctrlEX.aluOp = 0;
+            _latchIDEX.ctrlEX.aluSrc = 0;
+            _latchIDEX.ctrlEX.regDst = 0;
+        }
+#endif
+
+        // EX stage
+        _muxALUSrc->input(0, _latchIDEX.regFileReadData2);
+        _muxALUSrc->input(1, _latchIDEX.signExtImmediate);
+        _muxALUSrc->select(_latchIDEX.ctrlEX.aluSrc);
+        _muxALUSrc->output(&_aluInput2);
+        _aluControl->input({_latchIDEX.ctrlEX.aluOp, _latchIDEX.signExtImmediate.to_ulong() & 0x3F});
+        _aluControl->output(&_aluControlSignal);
+        _alu->input(0, _latchIDEX.regFileReadData1);
+        _alu->input(1, _aluInput2);
+        _alu->input(2, _aluControlSignal);
+        _alu->output(&_latchEXMEM.aluResult);
+        _latchEXMEM.aluZero = _alu->zero();
+        _adderBranchTargetAddr->input(0, _latchIDEX.pcPlus4);
+        _adderBranchTargetAddr->input(1, _latchIDEX.signExtImmediate << 2);
+        _adderBranchTargetAddr->output(&_latchEXMEM.branchTargetAddr);
+        _muxRegDst->input(0, _latchIDEX.rt);
+        _muxRegDst->input(1, _latchIDEX.rd);
+        _muxRegDst->select(_latchIDEX.ctrlEX.regDst);
+        _muxRegDst->output(&_latchEXMEM.regDstIdx);
+        _latchEXMEM.pcPlus4 = _latchIDEX.pcPlus4;
+        _latchEXMEM.regFileReadData2 = _latchIDEX.regFileReadData2;
+        _latchEXMEM.ctrlWB = _latchIDEX.ctrlWB;
+        _latchEXMEM.ctrlMEM = _latchIDEX.ctrlMEM;
+
+#ifdef ENABLE_DATA_FORWARDING
+        _forwardingUnit->advanceCycle();
+        _muxForwardA->input(0, _latchIDEX.regFileReadData1);
+        _muxForwardA->input(1, _latchEXMEM.aluResult);
+        _muxForwardA->input(2, _latchMEMWB.aluResult);
+        _muxForwardA->select(_forwardA);
+        _muxForwardA->output(&_muxForwardAOutput);
+        _alu->input(0, _muxForwardAOutput);
+        _muxForwardB->input(0, _latchIDEX.regFileReadData2);
+        _muxForwardB->input(1, _latchEXMEM.aluResult);
+        _muxForwardB->input(2, _latchMEMWB.aluResult);
+        _muxForwardB->select(_forwardB);
+        _muxForwardB->output(&_muxForwardBOutput);
+        _muxALUSrc->input(0, _muxForwardBOutput);
+#endif
+
+        // MEM stage
+        _dataMemory->address(_latchEXMEM.aluResult);
+        _dataMemory->writeEnable(_latchEXMEM.ctrlMEM.memWrite);
+        _dataMemory->readEnable(_latchEXMEM.ctrlMEM.memRead);
+        _dataMemory->input(_latchEXMEM.regFileReadData2);
+        _dataMemory->output(&_latchMEMWB.dataMemReadData);
+        _muxPCSrc->input(0, _latchEXMEM.pcPlus4);
+        _muxPCSrc->input(1, _latchEXMEM.branchTargetAddr);
+        _muxPCSrc->select(_latchEXMEM.ctrlMEM.branch && _latchEXMEM.aluZero);
+        _muxPCSrc->output(&_PC);
+        _latchMEMWB.aluResult = _latchEXMEM.aluResult;
+        _latchMEMWB.regDstIdx = _latchEXMEM.regDstIdx;
+        _latchMEMWB.ctrlWB = _latchEXMEM.ctrlWB;
+
+        // WB stage
+        _muxMemToReg->input(0, _latchMEMWB.aluResult);
+        _muxMemToReg->input(1, _latchMEMWB.dataMemReadData);
+        _muxMemToReg->select(_latchMEMWB.ctrlWB.memToReg);
+        _muxMemToReg->output(&_writeBackData);
+        _registerFile->write(_latchMEMWB.regDstIdx, _writeBackData, _latchMEMWB.ctrlWB.regWrite);
+
+        // Print register and memory contents after each cycle
+        _registerFile->printRegisters();
+        _dataMemory->printMemory();
+    }
+
+private:
+    // Current cycle count
+    std::uint32_t _currCycle;
+
+    // Program counter
+    std::uint32_t _PC;
+
+    // IF stage
+    Adder<32> *_adderPCPlus4;
+    Memory *_instMemory;
+    std::uint32_t _pcPlus4;
+
+    // IF/ID latch
+    struct {
+        std::uint32_t instruction;
+        std::uint32_t pcPlus4;
+        bool write = true;
+    } _latchIFID;
+
+    // ID stage
+    Control *_control;
+    RegisterFile *_registerFile;
+    SignExtend<16, 32> *_signExtend;
+
+    // ID/EX latch
+    struct {
+        std::uint32_t instruction;
+        std::uint32_t pcPlus4;
+        std::uint32_t regFileReadData1;
+        std::uint32_t regFileReadData2;
+        std::uint32_t signExtImmediate;
+        struct {
+            bool memToReg;
+            bool regWrite;
+        } ctrlWB;
+        struct {
+            bool branch;
+            bool memRead;
+            bool memWrite;
+        } ctrlMEM;
+        struct {
+            bool regDst;
+            bool aluSrc;
+            std::uint8_t aluOp;
+        } ctrlEX;
+        std::uint32_t rs;
+        std::uint32_t rt;
+        std::uint32_t rd;
+    } _latchIDEX;
+
+    // EX stage
+    Adder<32> *_adderBranchTargetAddr;
+    MUX2<32> *_muxALUSrc;
+    std::uint32_t _aluInput2;
+    ALUControl *_aluControl;
+    std::uint8_t _aluControlSignal;
+    ALU *_alu;
+    std::uint32_t _muxForwardAOutput;
+    std::uint32_t _muxForwardBOutput;
+    MUX2<5> *_muxRegDst;
+
+    // EX/MEM latch
+    struct {
+        std::uint32_t aluResult;
+        bool aluZero;
+        std::uint32_t branchTargetAddr;
+        std::uint32_t pcPlus4;
+        std::uint32_t regFileReadData2;
+        struct {
+            bool memToReg;
+            bool regWrite;
+        } ctrlWB;
+        struct {
+            bool branch;
+            bool memRead;
+            bool memWrite;
+        } ctrlMEM;
+        std::uint32_t regDstIdx;
+    } _latchEXMEM;
+
+    // MEM stage
+    MUX2<32> *_muxPCSrc;
+    Memory *_dataMemory;
+    std::uint32_t _PCSrc;
+
+    // MEM/WB latch
+    struct {
+        std::uint32_t dataMemReadData;
+        std::uint32_t aluResult;
+        struct {
+            bool memToReg;
+            bool regWrite;
+        } ctrlWB;
+        std::uint32_t regDstIdx;
+    } _latchMEMWB;
+
+    // WB stage
+    MUX2<32> *_muxMemToReg;
+    std::uint32_t _writeBackData;
+
+#ifdef ENABLE_DATA_FORWARDING
+    ForwardingUnit *_forwardingUnit;
+    Wire<2> _forwardA;
+    Wire<2> _forwardB;
+    MUX3<32> *_muxForwardA;
+    MUX3<32> *_muxForwardB;
+#ifdef ENABLE_HAZARD_DETECTION
+    HazardDetectionUnit *_hazDetUnit;
+    Wire<5> _hazDetIFIDRs;
+    Wire<5> _hazDetIFIDRt;
+    Wire<1> _hazDetPCWrite;
+    Wire<1> _hazDetIFIDWrite;
+    Wire<1> _hazDetIDEXCtrlWrite;
+#endif
+#endif
+};
+
+#endif // __PIPELINED_CPU_H__
