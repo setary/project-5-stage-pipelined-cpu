@@ -35,6 +35,8 @@ class ForwardingUnit : public DigitalCircuit {
       _oForwardB = oForwardB;
     }
     virtual void advanceCycle() {
+      *_oForwardA = 0b00;
+      *_oForwardB = 0b00;
       if (_iEXMEMRegWrite->to_ulong() && _iEXMEMRegDstIdx->to_ulong() != 0) {
         if (_iEXMEMRegDstIdx->to_ulong() == _iIDEXRs->to_ulong()) {
           *_oForwardA = 0b01;
@@ -164,8 +166,13 @@ class PipelinedCPU : public DigitalCircuit {
       _adderBranchTargetAddr = new Adder<32>(
         "adderBranchTargetAddr", &_latchIDEX.pcPlus4, &_adderBranchTargetAddrInput1, &_latchEXMEM.branchTargetAddr);
 
+#ifdef ENABLE_DATA_FORWARDING
+      _muxALUSrc = new MUX2<32>(
+        "muxALUSrc", &_muxForwardBOutput, &_latchIDEX.signExtImmediate, &_latchIDEX.ctrlEX.aluSrc, &_muxALUSrcOutput);
+#else
       _muxALUSrc = new MUX2<32>(
         "muxALUSrc", &_latchIDEX.regFileReadData2, &_latchIDEX.signExtImmediate, &_latchIDEX.ctrlEX.aluSrc, &_muxALUSrcOutput);
+#endif
 
       _aluControl = new ALUControl(
         &_latchIDEX.ctrlEX.aluOp,
@@ -177,7 +184,7 @@ class PipelinedCPU : public DigitalCircuit {
       _alu = new ALU(
         &_aluControlOutput,
         &_muxForwardAOutput,
-        &_muxForwardBOutput,
+        &_muxALUSrcOutput,
         &_latchEXMEM.aluResult,
         &_latchEXMEM.aluZero
       );
@@ -244,30 +251,44 @@ class PipelinedCPU : public DigitalCircuit {
 #endif
     }
 
-    virtual void advanceCycle() {
-      _currCycle += 1;
-
+    void WB() {
       // WB stage
       _muxMemToReg->advanceCycle();
-      printf("@@zsh _muxMemToRegOutput: %ld\n", _muxMemToRegOutput.to_ulong());
-      // todo
-      _registerFile->advanceCycle();
+      //printf("@@zsh WB regWrite: %ld, index: %ld, data: 0x%x\n",
+      //  _latchMEMWB.ctrlWB.regWrite.to_ulong(), _latchMEMWB.regDstIdx.to_ulong(), _muxMemToRegOutput.to_ulong());
+      if (_latchMEMWB.ctrlWB.regWrite.test(0)) {
+        _registerFile->advanceCycle();
+      }
+    }
 
+    void MEM() {
       // MEM stage
       _dataMemory->advanceCycle();
       _muxPCSrcSelect = _latchEXMEM.ctrlMEM.branch.to_ulong() & _latchEXMEM.aluZero.to_ulong();
-      _muxPCSrc->advanceCycle();
+#ifdef ENABLE_HAZARD_DETECTION
+      //if (_hazDetPCWrite.test(0)) {
+#endif
+        _muxPCSrc->advanceCycle();
+#ifdef ENABLE_HAZARD_DETECTION
+      //}
+#endif
 
       _latchMEMWB.aluResult = _latchEXMEM.aluResult;
       _latchMEMWB.regDstIdx = _latchEXMEM.regDstIdx;
-      printf("@@zsh _latchMEMWB.regDstIdx: %ld\n", _latchMEMWB.regDstIdx.to_ulong());
       _latchMEMWB.ctrlWB = _latchEXMEM.ctrlWB;
+    }
 
+    void EX() {
       // EX stage
-      _muxALUSrc->advanceCycle();
-
       _aluControlInput = _latchIDEX.signExtImmediate.to_ulong() & 0x3F;
       _aluControl->advanceCycle();
+
+#ifdef ENABLE_DATA_FORWARDING
+      _forwardingUnit->advanceCycle();
+      _muxForwardA->advanceCycle();
+      _muxForwardB->advanceCycle();
+#endif
+      _muxALUSrc->advanceCycle();
 
       _alu->advanceCycle();
 
@@ -277,20 +298,23 @@ class PipelinedCPU : public DigitalCircuit {
       _muxRegDst->advanceCycle();
 
       _latchEXMEM.regFileReadData2 = _latchIDEX.regFileReadData2;
+#ifdef ENABLE_DATA_FORWARDING
+      _latchEXMEM.regFileReadData2 = _muxForwardBOutput;
+#endif
       _latchEXMEM.ctrlWB = _latchIDEX.ctrlWB;
       _latchEXMEM.ctrlMEM = _latchIDEX.ctrlMEM;
+    }
 
-#ifdef ENABLE_DATA_FORWARDING
-      _forwardingUnit->advanceCycle();
-#endif
-
+    void ID() {
       // ID stage
       _opcode = (_latchIFID.instruction.to_ulong() >> 26) & 0x3F;
       _control->advanceCycle();
 
       _regFileReadRegister1 = (_latchIFID.instruction.to_ulong() >> 21) & 0x1F;
       _regFileReadRegister2 = (_latchIFID.instruction.to_ulong() >> 16) & 0x1F;
-      printf("@@zsh _latchMEMWB.regDstIdx: %ld, regWrite: %ld\n", _latchMEMWB.regDstIdx.to_ulong(), _latchMEMWB.ctrlWB.regWrite);
+      //printf("@@zsh ID regWrite: %ld, index: %ld, data: 0x%x\n",
+      //  _latchMEMWB.ctrlWB.regWrite.to_ulong(), _latchMEMWB.regDstIdx.to_ulong(), _muxMemToRegOutput.to_ulong());/
+      // todo
       _registerFile->advanceCycle();
 
       _signExtendInput = (_latchIFID.instruction.to_ulong() & 0xFFFF);
@@ -318,16 +342,29 @@ class PipelinedCPU : public DigitalCircuit {
         _latchIDEX.ctrlEX.regDst = 0;
       }
 #endif
+    }
 
+    void IF() {
       // IF stage
+#ifdef ENABLE_HAZARD_DETECTION
+      if (_hazDetIFIDWrite.test(0)) {
+#endif
       _adderPCPlus4->advanceCycle();
       _instMemory->advanceCycle();
-
       _latchIFID.pcPlus4 = _pcPlus4;
+#ifdef ENABLE_HAZARD_DETECTION
+      }
+#endif
+    }
 
-      // print
-      //_registerFile->printRegisters();
-      //_dataMemory->printMemory();
+    virtual void advanceCycle() {
+      _currCycle += 1;
+
+      WB();
+      MEM();
+      EX();
+      ID();
+      IF();
     }
 
     ~PipelinedCPU() {
@@ -518,4 +555,3 @@ class PipelinedCPU : public DigitalCircuit {
 };
 
 #endif
-
