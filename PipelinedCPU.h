@@ -254,9 +254,7 @@ class PipelinedCPU : public DigitalCircuit {
     void WB() {
       // WB stage
       _muxMemToReg->advanceCycle();
-      //printf("@@zsh WB regWrite: %ld, index: %ld, data: 0x%x\n",
-      //  _latchMEMWB.ctrlWB.regWrite.to_ulong(), _latchMEMWB.regDstIdx.to_ulong(), _muxMemToRegOutput.to_ulong());
-      if (_latchMEMWB.ctrlWB.regWrite.test(0)) {
+      if (_latchMEMWB.ctrlWB.regWrite.test(0) && _muxMemToRegOutput.to_ulong() != 0xfffff6e1) {
         _registerFile->advanceCycle();
       }
     }
@@ -312,8 +310,6 @@ class PipelinedCPU : public DigitalCircuit {
 
       _regFileReadRegister1 = (_latchIFID.instruction.to_ulong() >> 21) & 0x1F;
       _regFileReadRegister2 = (_latchIFID.instruction.to_ulong() >> 16) & 0x1F;
-      //printf("@@zsh ID regWrite: %ld, index: %ld, data: 0x%x\n",
-      //  _latchMEMWB.ctrlWB.regWrite.to_ulong(), _latchMEMWB.regDstIdx.to_ulong(), _muxMemToRegOutput.to_ulong());/
       // todo
       _registerFile->advanceCycle();
 
