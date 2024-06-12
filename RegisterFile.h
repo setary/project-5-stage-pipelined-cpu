@@ -63,11 +63,11 @@ class RegisterFile : public DigitalCircuit {
       *_oReadData2 = _registers[readReg2].to_ulong();
 
       if (_iRegWrite->test(0)) {
-        printf("@@zsh RegisterFile regWrite=1\n");
         std::uint8_t writeReg = _iWriteRegister->to_ulong();
-        if (writeReg != 0) { 
+        std::uint32_t writeData = _iWriteData->to_ulong();
+        if (writeReg != 0 && writeData != 0) {
           _registers[writeReg] = _iWriteData->to_ulong();
-        }  
+        }
       }
     }
 
@@ -86,4 +86,3 @@ class RegisterFile : public DigitalCircuit {
 };
 
 #endif
-
